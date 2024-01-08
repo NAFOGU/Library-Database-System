@@ -14,74 +14,74 @@ GO
 
 --Creates the Memebers table
 CREATE TABLE Records.Members (
-		MemberID					int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-		FirstName					nvarchar(50) NOT NULL,
-		LastName						nvarchar(50) NOT NULL,
-		AddressLine1				nvarchar(50) NOT NULL,
-		AddressLine2				nvarchar(50) NULL,
-		Postcode						nvarchar(50) NOT NULL,
-		City								nvarchar(50)  NOT NULL,
-		DateOfBirth					date NOT NULL,
-		Username						nvarchar(50)  NOT NULL,
-		PasswordHash				binary(64) NOT NULL,
-		Salt								uniqueidentifier NULL,
-		EmailAddress				nvarchar(100) UNIQUE NULL CHECK (EmailAddress LIKE '%_@_%._%'),
-		TelephoneNumber		nvarchar(20) NULL,
-		MembershipStartDate  date NOT NULL,
-		MembershipEndDate	 date NULL
+		MemberID			int NOT NULL PRIMARY KEY IDENTITY(1, 1),
+		FirstName			nvarchar(50) NOT NULL,
+		LastName			nvarchar(50) NOT NULL,
+		AddressLine1			nvarchar(50) NOT NULL,
+		AddressLine2			nvarchar(50) NULL,
+		Postcode			nvarchar(50) NOT NULL,
+		City				nvarchar(50)  NOT NULL,
+		DateOfBirth			date NOT NULL,
+		Username			nvarchar(50)  NOT NULL,
+		PasswordHash			binary(64) NOT NULL,
+		Salt				uniqueidentifier NULL,
+		EmailAddress			nvarchar(100) UNIQUE NULL CHECK (EmailAddress LIKE '%_@_%._%'),
+		TelephoneNumber			nvarchar(20) NULL,
+		MembershipStartDate  		date NOT NULL,
+		MembershipEndDate	 	date NULL
 		);
 
 --Creates the Catalogue table
 CREATE TABLE Records.Catalogue (
-		ItemID							int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-		ItemTitle						nvarchar(80) NOT NULL,
-		ItemType						nvarchar(50) NOT NULL,
-		Author							nvarchar(150) NOT NULL,
+		ItemID				int NOT NULL PRIMARY KEY IDENTITY(1, 1),
+		ItemTitle			nvarchar(80) NOT NULL,
+		ItemType			nvarchar(50) NOT NULL,
+		Author				nvarchar(150) NOT NULL,
 		YearOfPublication		int NOT NULL,
-		ISBN							nvarchar(20) NULL,
-		AddedDate					date  NOT NULL,
-		CurrentStatus				nvarchar(20) NOT NULL,
-		LostOrRemovedDate	date  NULL,
+		ISBN				nvarchar(20) NULL,
+		AddedDate			date  NOT NULL,
+		CurrentStatus			nvarchar(20) NOT NULL,
+		LostOrRemovedDate		date  NULL,
 		);
 
  --Creates the Loans table
 CREATE TABLE Records.Loans (
-		LoanID							int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-		MemberID					int NOT NULL FOREIGN KEY (MemberID) REFERENCES Records.Members (MemberID),
-		ItemID							int NOT NULL FOREIGN KEY (ItemID) REFERENCES Records.Catalogue (ItemID),
-		LoanDate						date NOT NULL,
-		DueDate						date NOT NULL,
-		ReturnDate					date NULL,
-		OverdueDays				int  NULL,
+		LoanID				int NOT NULL PRIMARY KEY IDENTITY(1, 1),
+		MemberID			int NOT NULL FOREIGN KEY (MemberID) REFERENCES Records.Members (MemberID),
+		ItemID				int NOT NULL FOREIGN KEY (ItemID) REFERENCES Records.Catalogue (ItemID),
+		LoanDate			date NOT NULL,
+		DueDate				date NOT NULL,
+		ReturnDate			date NULL,
+		OverdueDays			int  NULL,
 		OverdueAmount			money NULL,
 		);
 
 --Creates the FineRepayments table
 CREATE TABLE Records.FineRepayments (
-		FineID							int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-		LoanID							int NOT NULL FOREIGN KEY (LoanID) REFERENCES Records.Loans (LoanID),
-		FineOwed					money NOT NULL,
-		AmountRepaid				money NULL,
+		FineID				int NOT NULL PRIMARY KEY IDENTITY(1, 1),
+		LoanID				int NOT NULL FOREIGN KEY (LoanID) REFERENCES Records.Loans (LoanID),
+		FineOwed			money NOT NULL,
+		AmountRepaid			money NULL,
 		OutstandingBalance		money NULL,
-		DateOfRepayment		datetime NULL,
-		RepaymentMethod		nvarchar(6) NULL,
+		DateOfRepayment			datetime NULL,
+		RepaymentMethod			nvarchar(6) NULL,
 		);	
 
 
 --Create the ArchivedMembers table for deleted records in members table
 
 CREATE TABLE Records.ArchivedMembers (
-		MemberID					int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-		FirstName					nvarchar(50) NOT NULL,
-		LastName						nvarchar(50) NOT NULL,
-		AddressLine1				nvarchar(50) NOT NULL,
-		AddressLine2				nvarchar(50) NULL,
-		Postcode						nvarchar(50) NOT NULL,
-		City								nvarchar(50)  NULL,
-		DateOfBirth					date NOT NULL,
-		EmailAddress				nvarchar(100) UNIQUE NULL CHECK (EmailAddress LIKE '%_@_%._%'),
-		TelephoneNumber		nvarchar(20) NULL,
-		MembershipEndDate	 date NULL
+		MemberID			int NOT NULL PRIMARY KEY IDENTITY(1, 1),
+		FirstName			nvarchar(50) NOT NULL,
+		LastName			nvarchar(50) NOT NULL,
+		AddressLine1			nvarchar(50) NOT NULL,
+		AddressLine2			nvarchar(50) NULL,
+		Postcode			nvarchar(50) NOT NULL,
+		City				nvarchar(50)  NULL,
+		DateOfBirth			date NOT NULL,
+		EmailAddress			nvarchar(100) UNIQUE NULL CHECK (EmailAddress LIKE '%_@_%._%'),
+		TelephoneNumber			nvarchar(20) NULL,
+		MembershipEndDate	 	date NULL
 		);
 
 
@@ -130,7 +130,7 @@ WHERE l.DueDate < (GETDATE() + 5) AND l.DueDate > GETDATE();
 
 CREATE PROCEDURE Records.uspInsertNewMember
 		@mFirstName	  nvarchar(50), @mLastName	nvarchar(50), @mAddLine1	nvarchar(50),
-		@mAddLine2	  nvarchar(50), @mPostcode		nvarchar(50), @mCity	 nvarchar(50),
+		@mAddLine2	  nvarchar(50), @mPostcode	nvarchar(50), @mCity	 nvarchar(50),
 		@mDOB	 date, @mUsername	nvarchar(50), @mPassword	nvarchar(50),
 		@mEmailAddress	nvarchar(100), @mTelephoneNumber	nvarchar(20), @mMembershipStartDate	date, @mMembershipEndDate date
     
